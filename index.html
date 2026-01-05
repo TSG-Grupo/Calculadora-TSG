@@ -97,6 +97,7 @@
       user-select:none;
       -webkit-tap-highlight-color:transparent;
       white-space:nowrap;
+      width:100%;
     }
     button:active{transform:translateY(1px)}
     button.on{
@@ -235,15 +236,6 @@
 
           <div id="rulesNote" class="note"></div>
         </div>
-
-        <div class="card">
-          <textarea id="display" class="display" readonly></textarea>
-
-          <div class="btnRow2">
-            <button id="btnCopiar" class="copy" type="button" data-default-text="Copiar">Copiar</button>
-            <button id="btnLimpar" class="clear" type="button">Limpar</button>
-          </div>
-        </div>
       </div>
 
       <!-- COLUNA DIREITA -->
@@ -256,6 +248,16 @@
         </div>
 
         <button id="btnResetVagas" type="button">Resetar vagas</button>
+
+        <!-- DISPLAY + COPIAR/LIMPAR (AGORA NO FINAL, ABAIXO DO RESETAR VAGAS) -->
+        <div class="card">
+          <textarea id="display" class="display" readonly></textarea>
+
+          <div class="btnRow2">
+            <button id="btnCopiar" class="copy" type="button" data-default-text="Copiar">Copiar</button>
+            <button id="btnLimpar" class="clear" type="button">Limpar</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -318,6 +320,7 @@
   function isExclusive(){ return state.mode === 'exclusive'; }
   function secondaryLabel(){ return isExclusive() ? 'Secundária PS5' : 'Secundária (PS4/PS5)'; }
 
+  // Promo: máscara DD/MM/AAAA travando em 8 dígitos
   function formatPromoFromDigits(digits){
     const d = digits.slice(0, 8);
     const p1 = d.slice(0,2);
@@ -328,7 +331,6 @@
     if (p3) out += '/' + p3;
     return out;
   }
-
   function isValidDateDDMMYYYY(str){
     if (!str) return true;
     const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(str);
@@ -341,7 +343,6 @@
     const daysInMonth = new Date(yyyy, mm, 0).getDate();
     return dd >= 1 && dd <= daysInMonth;
   }
-
   function updatePromoValidation(){
     const promoEl = document.getElementById('promo');
     const v = promoEl.value.trim();
@@ -349,7 +350,6 @@
     promoEl.classList.toggle('invalid', v.length > 0 && !ok);
     return ok;
   }
-
   function promoKeyDownGuard(e){
     const allowedKeys = ['Backspace','Delete','Tab','Enter','Escape','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'];
     if (allowedKeys.includes(e.key)) return;

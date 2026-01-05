@@ -43,12 +43,15 @@
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
     @media (max-width:820px){ .grid{grid-template-columns:1fr} }
 
+    .col{display:flex;flex-direction:column;gap:12px;min-width:0}
+
     .card{
       background:rgba(17,24,39,.72);
       border:1px solid var(--stroke);
       border-radius:16px;
       padding:14px;
       backdrop-filter: blur(6px);
+      min-width:0;
     }
 
     .label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}
@@ -63,13 +66,11 @@
       font-size:16px;
       outline:none;
     }
-
     input.invalid{
       border-color: rgba(239,68,68,.75);
       box-shadow: 0 0 0 3px rgba(239,68,68,.15);
     }
 
-    /* Valor + Promo lado a lado */
     .rowFields{
       display:flex;
       gap:8px;
@@ -77,15 +78,14 @@
       flex-wrap:nowrap;
       margin-top:12px;
     }
-    .colPrice{flex:0 0 150px}
-    .colPromo{flex:1 1 auto}
+    .colPrice{flex:0 0 150px; min-width:0}
+    .colPromo{flex:1 1 auto; min-width:0}
     @media (max-width:520px){
       .rowFields{flex-wrap:wrap}
       .colPrice{flex:1 1 140px}
       .colPromo{flex:1 1 220px}
     }
 
-    /* Botões: padrão */
     button{
       border:1px solid var(--off-br);
       background:var(--off-bg);
@@ -121,7 +121,6 @@
       font-weight:600;
     }
 
-    /* Linha de 4 botões (100% do card) */
     .btnRow4{
       margin-top:12px;
       display:grid;
@@ -129,18 +128,16 @@
       gap:10px;
       width:100%;
     }
-    /* Linha de 3 botões (100% do card) */
-    .btnRow3{
-      margin-top:10px;
-      display:grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap:10px;
-      width:100%;
-    }
-
     @media (max-width:520px){
       .btnRow4{grid-template-columns:1fr 1fr}
-      .btnRow3{grid-template-columns:1fr 1fr}
+    }
+
+    .btnRow2{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      width:100%;
     }
 
     .note{
@@ -151,29 +148,47 @@
     }
 
     .slotsTitle{
-      margin:0 0 8px;
+      margin:0 0 10px;
       font-size:16px;
       letter-spacing:-0.1px;
+      font-weight:700;
+    }
+    .slotsTitle small{
+      font-weight:400;
+      color:var(--muted);
+      font-size:12.5px;
     }
 
-    .slotsGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .slotsGrid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
     @media (max-width:820px){ .slotsGrid{grid-template-columns:1fr} }
 
     .display{
       width:100%;
+      max-width:100%;
       border:1px solid var(--stroke);
       background:radial-gradient(1200px 300px at 50% 0%, #18233a 0%, #0b1220 55%, #070a0f 100%);
       color:#eaf2ff;
       border-radius:16px;
       padding:14px;
-      min-height:220px;
+      min-height:240px;
       resize:vertical;
-      white-space:pre;
-      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      font-size:14px;
-      line-height:1.45;
+
+      white-space:pre-wrap;
+      overflow-wrap:anywhere;
+      word-break:break-word;
+      overflow-x:hidden;
+
+      text-align:justify;
+      text-justify:inter-word;
+
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      font-size:15px;
+      line-height:1.35;
       outline:none;
-      margin-top:12px;
     }
 
     .toast{
@@ -193,64 +208,79 @@
     </div>
 
     <div class="grid">
-      <!-- DADOS -->
-      <div class="card">
-        <label class="label">Nome do jogo</label>
-        <input id="game" placeholder="Ex.: Monster Hunter Wilds" />
+      <!-- COLUNA ESQUERDA -->
+      <div class="col">
+        <div class="card">
+          <label class="label">Nome do jogo</label>
+          <input id="game" placeholder="Ex.: Monster Hunter Wilds" />
 
-        <div class="rowFields">
-          <div class="colPrice">
-            <label class="label">Valor (R$)</label>
-            <input id="price" inputmode="decimal" placeholder="300,00" />
+          <div class="rowFields">
+            <div class="colPrice">
+              <label class="label">Valor (R$)</label>
+              <input id="price" inputmode="decimal" placeholder="300,00" />
+            </div>
+
+            <div class="colPromo">
+              <label class="label">Promoção válida até dd/mm/aaaa</label>
+              <input id="promo" inputmode="numeric" placeholder="" />
+            </div>
           </div>
 
-          <div class="colPromo">
-            <label class="label">Promoção válida até dd/mm/aaaa</label>
-            <input id="promo" inputmode="numeric" placeholder="" />
+          <div class="btnRow4">
+            <button id="btnMulti" type="button">PS4 e PS5</button>
+            <button id="btnExclusive" type="button">Exclusivo PS5</button>
+            <button id="btnG3" type="button">Grupo 3</button>
+            <button id="btnG5" type="button">Grupo 5</button>
+          </div>
+
+          <div id="rulesNote" class="note"></div>
+        </div>
+
+        <div class="card">
+          <textarea id="display" class="display" readonly></textarea>
+
+          <div class="btnRow2">
+            <button id="btnCopiar" class="copy" type="button" data-default-text="Copiar">Copiar</button>
+            <button id="btnLimpar" class="clear" type="button">Limpar</button>
           </div>
         </div>
-
-        <!-- 4 botões: modo + grupo -->
-        <div class="btnRow4">
-          <button id="btnMulti" type="button">PS4 e PS5</button>
-          <button id="btnExclusive" type="button">Exclusivo PS5</button>
-          <button id="btnG3" type="button">Grupo 3</button>
-          <button id="btnG5" type="button">Grupo 5</button>
-        </div>
-
-        <!-- ações -->
-        <div class="btnRow3">
-          <button id="btnCopiar" class="copy" type="button">Copiar</button>
-          <button id="btnLimpar" class="clear" type="button">Limpar</button>
-          <button id="btnResetVagas" type="button">Resetar vagas</button>
-        </div>
-
-        <div id="rulesNote" class="note"></div>
       </div>
 
-      <!-- VAGAS -->
-      <div class="card">
-        <div class="slotsTitle"><b>Vagas</b> <span style="color:var(--muted);font-size:12.5px;">(deixar em branco significa que está vago)</span></div>
-        <div id="slots" class="slotsGrid"></div>
+      <!-- COLUNA DIREITA -->
+      <div class="col">
+        <div class="card">
+          <div class="slotsTitle">
+            Vagas <small>(deixar em branco significa que está vago)</small>
+          </div>
+          <div id="slots" class="slotsGrid"></div>
+        </div>
+
+        <button id="btnResetVagas" type="button">Resetar vagas</button>
       </div>
     </div>
-
-    <textarea id="display" class="display" readonly></textarea>
   </div>
 
   <div id="toast" class="toast">Copiado!</div>
 
 <script>
-  const state = {
-    groupSize: 3,
-    mode: 'multi' // 'multi' | 'exclusive'
-  };
+  const state = { groupSize: 3, mode: 'multi' };
 
   function showToast(msg){
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.classList.add('show');
     setTimeout(()=>t.classList.remove('show'), 1400);
+  }
+
+  function setCopyButtonFeedback(ok){
+    const btn = document.getElementById('btnCopiar');
+    const defaultText = btn.getAttribute('data-default-text') || 'Copiar';
+    if (!ok){
+      btn.textContent = defaultText;
+      return;
+    }
+    btn.textContent = 'Copiado ✓';
+    setTimeout(()=>{ btn.textContent = defaultText; }, 1200);
   }
 
   function parseBRLToCents(str){
@@ -286,11 +316,8 @@
   }
 
   function isExclusive(){ return state.mode === 'exclusive'; }
-  function secondaryLabel(){
-    return isExclusive() ? 'Secundária PS5' : 'Secundária (PS4/PS5)';
-  }
+  function secondaryLabel(){ return isExclusive() ? 'Secundária PS5' : 'Secundária (PS4/PS5)'; }
 
-  // Promo: máscara DD/MM/AAAA travando em 8 dígitos
   function formatPromoFromDigits(digits){
     const d = digits.slice(0, 8);
     const p1 = d.slice(0,2);
@@ -301,6 +328,7 @@
     if (p3) out += '/' + p3;
     return out;
   }
+
   function isValidDateDDMMYYYY(str){
     if (!str) return true;
     const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(str);
@@ -313,6 +341,7 @@
     const daysInMonth = new Date(yyyy, mm, 0).getDate();
     return dd >= 1 && dd <= daysInMonth;
   }
+
   function updatePromoValidation(){
     const promoEl = document.getElementById('promo');
     const v = promoEl.value.trim();
@@ -320,11 +349,9 @@
     promoEl.classList.toggle('invalid', v.length > 0 && !ok);
     return ok;
   }
+
   function promoKeyDownGuard(e){
-    const allowedKeys = [
-      'Backspace','Delete','Tab','Enter','Escape',
-      'ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'
-    ];
+    const allowedKeys = ['Backspace','Delete','Tab','Enter','Escape','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'];
     if (allowedKeys.includes(e.key)) return;
     if (e.ctrlKey || e.metaKey) return;
 
@@ -449,7 +476,7 @@
     });
 
     lines.push('');
-    lines.push('Se o grupo fechar sem a Secundária preenchida, o valor será redistribuído entre as Primárias.');
+    lines.push('Se o grupo fechar sem a Secundária, o valor será redistribuído entre as Primárias.');
 
     out.value = lines.join('\n');
   }
@@ -458,20 +485,28 @@
     const text = (document.getElementById('display').value || '').trim();
     if (!text) return;
 
+    let ok = false;
     try{
       if (navigator.clipboard && window.isSecureContext){
         await navigator.clipboard.writeText(text);
-        showToast('Copiado!');
-        return;
+        ok = true;
+      } else {
+        const disp = document.getElementById('display');
+        disp.removeAttribute('readonly');
+        disp.select();
+        ok = document.execCommand('copy');
+        disp.setAttribute('readonly','readonly');
       }
-      const disp = document.getElementById('display');
-      disp.removeAttribute('readonly');
-      disp.select();
-      document.execCommand('copy');
-      disp.setAttribute('readonly','readonly');
-      showToast('Copiado!');
     } catch(e){
+      ok = false;
+    }
+
+    if (ok){
+      showToast('Copiado!');
+      setCopyButtonFeedback(true);
+    } else {
       showToast('Selecione e copie');
+      setCopyButtonFeedback(false);
     }
   }
 
@@ -488,6 +523,8 @@
     buildSlots();
     render();
     showToast('Limpo!');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   function setMode(mode){

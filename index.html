@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Calculadora TSG</title>
+
+  <meta property="og:title" content="Calculadora TSG" />
+  <meta property="og:description" content="Gera anúncio pronto (valores + vagas) para postar no WhatsApp." />
+  <meta property="og:type" content="website" />
+
+  <style>
+    :root{
+      --text:#e5e7eb;
+      --muted:#94a3b8;
+      --stroke:#243244;
+
+      --off-bg: rgba(148,163,184,.10);
+      --off-br: rgba(148,163,184,.28);
+
+      --on-bg: rgba(34,197,94,.18);
+      --on-br: rgba(34,197,94,.45);
+      --on-tx: #dcfce7;
+
+      --danger-bg: rgba(239,68,68,.16);
+      --danger-br: rgba(239,68,68,.40);
+
+      --copy-bg: rgba(31,111,235,.95);
+      --copy-br: rgba(31,111,235,.95);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,#070a0f, #0b1220 45%, #070a0f);
+      color:var(--text);
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+    .wrap{max-width:920px;margin:0 auto;padding:16px 14px 30px}
+    h1{margin:0;font-size:22px;letter-spacing:-0.2px}
+    .hint{color:var(--muted);font-size:13px;line-height:1.3;margin-top:6px}
+
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    @media (max-width:820px){ .grid{grid-template-columns:1fr} }
+
+    .card{
+      background:rgba(17,24,39,.72);
+      border:1px solid var(--stroke);
+      border-radius:16px;
+      padding:14px;
+      backdrop-filter: blur(6px);
+    }
+
+    .label{display:block;font-size:13px;color:var(--muted);margin:0 0 6px}
+
+    input{
+      width:100%;
+      border:1px solid var(--stroke);
+      background:rgba(2,6,23,.55);
+      color:var(--text);
+      border-radius:14px;
+      padding:12px;
+      font-size:16px;
+      outline:none;
+    }
+
+    input.invalid{
+      border-color: rgba(239,68,68,.75);
+      box-shadow: 0 0 0 3px rgba(239,68,68,.15);
+    }
+
+    /* Valor + Promo lado a lado */
+    .rowFields{
+      display:flex;
+      gap:8px;
+      align-items:flex-end;
+      flex-wrap:nowrap;
+      margin-top:12px;
+    }
+    .colPrice{flex:0 0 150px}
+    .colPromo{flex:1 1 auto}
+    @media (max-width:520px){
+      .rowFields{flex-wrap:wrap}
+      .colPrice{flex:1 1 140px}
+      .colPromo{flex:1 1 220px}
+    }
+
+    /* Botões: padrão */
+    button{
+      border:1px solid var(--off-br);
+      background:var(--off-bg);
+      color:var(--text);
+      padding:11px 10px;
+      border-radius:14px;
+      font-size:14px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+      white-space:nowrap;
+    }
+    button:active{transform:translateY(1px)}
+    button.on{
+      background:var(--on-bg);
+      border-color:var(--on-br);
+      color:var(--on-tx);
+    }
+    button.disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+    button.copy{
+      background:var(--copy-bg);
+      border-color:var(--copy-br);
+      color:white;
+      font-weight:600;
+    }
+    button.clear{
+      background:var(--danger-bg);
+      border-color:var(--danger-br);
+      color:#fee2e2;
+      font-weight:600;
+    }
+
+    /* Linha de 4 botões (100% do card) */
+    .btnRow4{
+      margin-top:12px;
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap:10px;
+      width:100%;
+    }
+    /* Linha de 3 botões (100% do card) */
+    .btnRow3{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap:10px;
+      width:100%;
+    }
+
+    @media (max-width:520px){
+      .btnRow4{grid-template-columns:1fr 1fr}
+      .btnRow3{grid-template-columns:1fr 1fr}
+    }
+
+    .note{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12.5px;
+      line-height:1.35;
+    }
+
+    .slotsTitle{
+      margin:0 0 8px;
+      font-size:16px;
+      letter-spacing:-0.1px;
+    }
+
+    .slotsGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media (max-width:820px){ .slotsGrid{grid-template-columns:1fr} }
+
+    .display{
+      width:100%;
+      border:1px solid var(--stroke);
+      background:radial-gradient(1200px 300px at 50% 0%, #18233a 0%, #0b1220 55%, #070a0f 100%);
+      color:#eaf2ff;
+      border-radius:16px;
+      padding:14px;
+      min-height:220px;
+      resize:vertical;
+      white-space:pre;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:14px;
+      line-height:1.45;
+      outline:none;
+      margin-top:12px;
+    }
+
+    .toast{
+      position:fixed;left:50%;bottom:20px;transform:translateX(-50%);
+      background:#0b1220;border:1px solid var(--stroke);color:var(--text);
+      padding:10px 14px;border-radius:999px;font-size:14px;
+      opacity:0;pointer-events:none;transition:opacity .2s;
+    }
+    .toast.show{opacity:.95}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div>
+      <h1>Calculadora TSG</h1>
+      <div class="hint">Preencha os campos e o anúncio aparece no final, pronto para copiar.</div>
+    </div>
+
+    <div class="grid">
+      <!-- DADOS -->
+      <div class="card">
+        <label class="label">Nome do jogo</label>
+        <input id="game" placeholder="Ex.: Monster Hunter Wilds" />
+
+        <div class="rowFields">
+          <div class="colPrice">
+            <label class="label">Valor (R$)</label>
+            <input id="price" inputmode="decimal" placeholder="300,00" />
+          </div>
+
+          <div class="colPromo">
+            <label class="label">Promoção válida até dd/mm/aaaa</label>
+            <input id="promo" inputmode="numeric" placeholder="" />
+          </div>
+        </div>
+
+        <!-- 4 botões: modo + grupo -->
+        <div class="btnRow4">
+          <button id="btnMulti" type="button">PS4 e PS5</button>
+          <button id="btnExclusive" type="button">Exclusivo PS5</button>
+          <button id="btnG3" type="button">Grupo 3</button>
+          <button id="btnG5" type="button">Grupo 5</button>
+        </div>
+
+        <!-- ações -->
+        <div class="btnRow3">
+          <button id="btnCopiar" class="copy" type="button">Copiar</button>
+          <button id="btnLimpar" class="clear" type="button">Limpar</button>
+          <button id="btnResetVagas" type="button">Resetar vagas</button>
+        </div>
+
+        <div id="rulesNote" class="note"></div>
+      </div>
+
+      <!-- VAGAS -->
+      <div class="card">
+        <div class="slotsTitle"><b>Vagas</b> <span style="color:var(--muted);font-size:12.5px;">(deixar em branco significa que está vago)</span></div>
+        <div id="slots" class="slotsGrid"></div>
+      </div>
+    </div>
+
+    <textarea id="display" class="display" readonly></textarea>
+  </div>
+
+  <div id="toast" class="toast">Copiado!</div>
+
+<script>
+  const state = {
+    groupSize: 3,
+    mode: 'multi' // 'multi' | 'exclusive'
+  };
+
+  function showToast(msg){
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 1400);
+  }
+
+  function parseBRLToCents(str){
+    if(!str) return 0;
+    let s = String(str).trim();
+    if(!s) return 0;
+    s = s.replace(/\s/g,'').replace(/R\$/gi,'');
+    if (s.includes(',')) s = s.replace(/\./g,'').replace(',','.');
+    const n = Number(s);
+    if (!isFinite(n) || n <= 0) return 0;
+    return Math.round(n * 100);
+  }
+
+  function centsToBRL(cents){
+    const n = (cents || 0) / 100;
+    return n.toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
+  }
+
+  function calcSharesNormal(totalCents, groupSize){
+    if (groupSize === 3){
+      const p = 0.40;
+      const prim1 = Math.round(totalCents * p);
+      const prim2 = Math.round(totalCents * p);
+      const sec = totalCents - prim1 - prim2;
+      return [prim1, prim2, sec];
+    } else {
+      const p = 0.225;
+      const prim = [0,1,2,3].map(()=> Math.round(totalCents * p));
+      const sumPrim = prim.reduce((a,b)=>a+b,0);
+      const sec = totalCents - sumPrim;
+      return [...prim, sec];
+    }
+  }
+
+  function isExclusive(){ return state.mode === 'exclusive'; }
+  function secondaryLabel(){
+    return isExclusive() ? 'Secundária PS5' : 'Secundária (PS4/PS5)';
+  }
+
+  // Promo: máscara DD/MM/AAAA travando em 8 dígitos
+  function formatPromoFromDigits(digits){
+    const d = digits.slice(0, 8);
+    const p1 = d.slice(0,2);
+    const p2 = d.slice(2,4);
+    const p3 = d.slice(4,8);
+    let out = p1;
+    if (p2) out += '/' + p2;
+    if (p3) out += '/' + p3;
+    return out;
+  }
+  function isValidDateDDMMYYYY(str){
+    if (!str) return true;
+    const m = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(str);
+    if (!m) return false;
+    const dd = Number(m[1]);
+    const mm = Number(m[2]);
+    const yyyy = Number(m[3]);
+    if (yyyy < 2020 || yyyy > 2100) return false;
+    if (mm < 1 || mm > 12) return false;
+    const daysInMonth = new Date(yyyy, mm, 0).getDate();
+    return dd >= 1 && dd <= daysInMonth;
+  }
+  function updatePromoValidation(){
+    const promoEl = document.getElementById('promo');
+    const v = promoEl.value.trim();
+    const ok = isValidDateDDMMYYYY(v);
+    promoEl.classList.toggle('invalid', v.length > 0 && !ok);
+    return ok;
+  }
+  function promoKeyDownGuard(e){
+    const allowedKeys = [
+      'Backspace','Delete','Tab','Enter','Escape',
+      'ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'
+    ];
+    if (allowedKeys.includes(e.key)) return;
+    if (e.ctrlKey || e.metaKey) return;
+
+    if (!/^\d$/.test(e.key)) { e.preventDefault(); return; }
+    const digits = e.target.value.replace(/\D/g,'');
+    if (digits.length >= 8) { e.preventDefault(); return; }
+  }
+
+  function slotDefs(){
+    const sec = secondaryLabel();
+    if (state.groupSize === 5){
+      return [
+        {key:'ps4p1', label:'Primária 1 PS4'},
+        {key:'ps4p2', label:'Primária 2 PS4'},
+        {key:'ps5p1', label:'Primária 1 PS5'},
+        {key:'ps5p2', label:'Primária 2 PS5'},
+        {key:'sec',   label: sec}
+      ];
+    }
+    return [
+      {key:'ps5p1', label:'Primária 1 PS5'},
+      {key:'ps5p2', label:'Primária 2 PS5'},
+      {key:'sec',   label: sec}
+    ];
+  }
+
+  function setOn(el, on){ el.classList.toggle('on', !!on); }
+  function setDisabled(el, disabled){
+    el.disabled = !!disabled;
+    el.classList.toggle('disabled', !!disabled);
+  }
+
+  function refreshRulesNote(){
+    const el = document.getElementById('rulesNote');
+    if (state.groupSize === 3){
+      el.textContent = 'Regras: Grupo 3 = 40% (cada primária) e 20% (secundária).';
+    } else {
+      el.textContent = 'Regras: Grupo 5 = 22,5% (cada primária) e 10% (secundária).';
+    }
+  }
+
+  function refreshButtons(){
+    setOn(document.getElementById('btnMulti'), state.mode === 'multi');
+    setOn(document.getElementById('btnExclusive'), state.mode === 'exclusive');
+
+    setOn(document.getElementById('btnG3'), state.groupSize === 3);
+    setOn(document.getElementById('btnG5'), state.groupSize === 5);
+
+    const btnG5 = document.getElementById('btnG5');
+    setDisabled(btnG5, isExclusive());
+
+    if (isExclusive() && state.groupSize === 5){
+      state.groupSize = 3;
+      setOn(document.getElementById('btnG3'), true);
+      setOn(btnG5, false);
+    }
+
+    refreshRulesNote();
+  }
+
+  function buildSlots(){
+    const wrap = document.getElementById('slots');
+    wrap.innerHTML = '';
+    slotDefs().forEach(d=>{
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <label class="label">${d.label}</label>
+        <input id="name_${d.key}" placeholder="vaga" />
+      `;
+      wrap.appendChild(div);
+    });
+    slotDefs().forEach(d=>{
+      document.getElementById(`name_${d.key}`).addEventListener('input', render);
+    });
+  }
+
+  function resetSlotsOnly(){
+    buildSlots();
+    render();
+    showToast('Vagas resetadas');
+  }
+
+  function render(){
+    const game = (document.getElementById('game').value || '').trim();
+    const totalCents = parseBRLToCents(document.getElementById('price').value);
+
+    const promoEl = document.getElementById('promo');
+    const promoRaw = (promoEl.value || '').trim();
+    const promoOk = updatePromoValidation();
+    const promo = (promoRaw && promoOk) ? promoRaw : '';
+
+    const out = document.getElementById('display');
+
+    if (!game && totalCents <= 0){ out.value = "Preencha o nome do jogo e o valor para gerar o anúncio."; return; }
+    if (!game){ out.value = "Preencha o nome do jogo."; return; }
+    if (totalCents <= 0){ out.value = "Preencha o valor do jogo (ex.: 300,00)."; return; }
+
+    const shares = calcSharesNormal(totalCents, state.groupSize);
+    const secLabel = secondaryLabel();
+    const defs = slotDefs();
+
+    const lines = [];
+    lines.push(game);
+    lines.push(`Valor: ${centsToBRL(totalCents)}`);
+    if (promo) lines.push(`Promoção válida até ${promo}`);
+
+    lines.push('');
+
+    if (state.groupSize === 3){
+      lines.push(`Primárias PS5 - ${centsToBRL(shares[0])}`);
+      lines.push(`${secLabel} - ${centsToBRL(shares[2])}`);
+    } else {
+      lines.push(`Primárias PS4 - ${centsToBRL(shares[0])}`);
+      lines.push(`Primárias PS5 - ${centsToBRL(shares[2])}`);
+      lines.push(`${secLabel} - ${centsToBRL(shares[4])}`);
+    }
+
+    lines.push('');
+    defs.forEach(d=>{
+      const name = (document.getElementById(`name_${d.key}`)?.value || '').trim() || 'vaga';
+      lines.push(`${d.label} - ${name}`);
+    });
+
+    lines.push('');
+    lines.push('Se o grupo fechar sem a Secundária preenchida, o valor será redistribuído entre as Primárias.');
+
+    out.value = lines.join('\n');
+  }
+
+  async function copiar(){
+    const text = (document.getElementById('display').value || '').trim();
+    if (!text) return;
+
+    try{
+      if (navigator.clipboard && window.isSecureContext){
+        await navigator.clipboard.writeText(text);
+        showToast('Copiado!');
+        return;
+      }
+      const disp = document.getElementById('display');
+      disp.removeAttribute('readonly');
+      disp.select();
+      document.execCommand('copy');
+      disp.setAttribute('readonly','readonly');
+      showToast('Copiado!');
+    } catch(e){
+      showToast('Selecione e copie');
+    }
+  }
+
+  function limpar(){
+    document.getElementById('game').value = '';
+    document.getElementById('price').value = '';
+    document.getElementById('promo').value = '';
+    document.getElementById('promo').classList.remove('invalid');
+
+    state.groupSize = 3;
+    state.mode = 'multi';
+
+    refreshButtons();
+    buildSlots();
+    render();
+    showToast('Limpo!');
+  }
+
+  function setMode(mode){
+    if (mode === state.mode) return;
+    state.mode = mode;
+    if (isExclusive()) state.groupSize = 3;
+    refreshButtons();
+    buildSlots();
+    render();
+  }
+
+  function setGroup(size){
+    if (size === 5 && isExclusive()) return;
+    state.groupSize = size;
+    refreshButtons();
+    buildSlots();
+    render();
+  }
+
+  function init(){
+    document.getElementById('btnMulti').addEventListener('click', ()=>setMode('multi'));
+    document.getElementById('btnExclusive').addEventListener('click', ()=>setMode('exclusive'));
+
+    document.getElementById('btnG3').addEventListener('click', ()=>setGroup(3));
+    document.getElementById('btnG5').addEventListener('click', ()=>setGroup(5));
+
+    document.getElementById('btnCopiar').addEventListener('click', copiar);
+    document.getElementById('btnLimpar').addEventListener('click', limpar);
+    document.getElementById('btnResetVagas').addEventListener('click', resetSlotsOnly);
+
+    document.getElementById('game').addEventListener('input', render);
+    document.getElementById('price').addEventListener('input', render);
+
+    const promoEl = document.getElementById('promo');
+    promoEl.addEventListener('keydown', promoKeyDownGuard);
+    promoEl.addEventListener('input', (e)=>{
+      const digits = e.target.value.replace(/\D/g,'').slice(0, 8);
+      e.target.value = formatPromoFromDigits(digits);
+      render();
+    });
+
+    refreshButtons();
+    buildSlots();
+    render();
+  }
+  init();
+</script>
+</body>
+</html>

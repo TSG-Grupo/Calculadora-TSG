@@ -68,7 +68,7 @@
       background:rgba(2,6,23,.55);
       color:var(--text);
       border-radius:14px;
-      padding:12px;
+      padding:11px 12px;
       font-size:16px;
       outline:none;
     }
@@ -127,7 +127,7 @@
       border:1px solid var(--off-br);
       background:var(--off-bg);
       color:var(--text);
-      border-radius:16px;
+      border-radius:14px;
       cursor:pointer;
       user-select:none;
       -webkit-tap-highlight-color:transparent;
@@ -157,10 +157,11 @@
     .iconWrap.active .iconCaption{ color: var(--on-tx); }
     .iconWrap.disabled .iconCaption{ opacity:.70; }
 
+    /* botões menores */
     .iconBtn{
-      height:54px;
+      height:42px;
       width:100%;
-      max-width:78px;
+      max-width:72px;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -168,20 +169,20 @@
       font-size:0;
       position:relative;
     }
-    .iconBtn svg{ width:22px;height:22px; display:block; }
+    .iconBtn svg{ width:19px;height:19px; display:block; }
 
     .iconWrap.active .iconBtn{
       border-color: var(--ring);
       box-shadow:
         0 0 0 2px rgba(34,197,94,.55),
-        0 0 0 6px rgba(34,197,94,.14),
-        0 0 18px rgba(34,197,94,.18);
+        0 0 0 6px rgba(34,197,94,.12),
+        0 0 14px rgba(34,197,94,.16);
     }
     .iconWrap.active .iconBtn::after{
       content:"";
       position:absolute;
       inset:3px;
-      border-radius:13px;
+      border-radius:12px;
       box-shadow: inset 0 0 0 1px rgba(34,197,94,.22);
       pointer-events:none;
     }
@@ -221,6 +222,7 @@
       .iconRow4{grid-template-columns:1fr 1fr}
       .iconBtn{max-width:none}
     }
+
     .iconRow3{
       margin-top:10px;
       display:grid;
@@ -246,11 +248,6 @@
       letter-spacing:-0.1px;
       font-weight:700;
     }
-    .slotsTitle small{
-      font-weight:400;
-      color:var(--muted);
-      font-size:12.5px;
-    }
 
     .slotsGrid{
       display:grid;
@@ -266,14 +263,7 @@
       padding:10px;
       color:var(--muted);
       font-size:13px;
-    }
-    .mediaPreview iframe{
-      width:100%;
-      aspect-ratio:16/9;
-      border:0;
-      border-radius:12px;
-      margin-top:10px;
-      background:#000;
+      line-height:1.35;
     }
 
     .display{
@@ -284,7 +274,7 @@
       color:#eaf2ff;
       border-radius:16px;
       padding:14px;
-      min-height:260px;
+      min-height:240px;
       resize:vertical;
 
       white-space:pre-wrap;
@@ -309,24 +299,24 @@
     }
     .toast.show{opacity:.95}
 
-    .svgCheck{ width:22px;height:22px; }
+    .svgCheck{ width:19px;height:19px; }
 
-    /* campo de vídeo + lupa */
     .videoRow{
       display:flex;
       gap:8px;
       align-items:center;
     }
+    /* lupa (menor) */
     .searchBtn{
-      height:48px;
-      width:54px;
-      min-width:54px;
+      height:42px;
+      width:46px;
+      min-width:46px;
       display:flex;
       align-items:center;
       justify-content:center;
       border-radius:14px;
     }
-    .searchBtn svg{ width:22px;height:22px; }
+    .searchBtn svg{ width:19px;height:19px; }
   </style>
 </head>
 <body>
@@ -375,7 +365,6 @@
             <div class="videoRow">
               <input id="mediaUrl" inputmode="url" placeholder="Cole o link do YouTube aqui" />
               <button id="btnYoutubeSearch" class="searchBtn" type="button" aria-label="Buscar vídeo no YouTube" title="Buscar no YouTube">
-                <!-- lupa -->
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <circle cx="11" cy="11" r="7"></circle>
@@ -384,11 +373,6 @@
               </button>
             </div>
             <div id="mediaPreview" class="mediaPreview">Sem vídeo (opcional).</div>
-          </div>
-
-          <div style="margin-top:12px">
-            <label class="label">Link do grupo TSG (convite) (opcional)</label>
-            <input id="groupUrl" inputmode="url" value="https://chat.whatsapp.com/ChYWroKiMLhCHTWDwM4k5u" />
           </div>
 
           <!-- CONTROLES (ícones) -->
@@ -452,30 +436,14 @@
       <!-- DIREITA -->
       <div class="col">
         <div class="card">
-          <div class="slotsTitle">
-            Vagas <small>(deixar em branco significa que está vago)</small>
-          </div>
+          <div class="slotsTitle">Vagas</div>
           <div id="slots" class="slotsGrid"></div>
-        </div>
-
-        <div class="iconWrap" id="wrap_btnResetVagas" style="align-self:center">
-          <button id="btnResetVagas" class="iconBtn" type="button" aria-label="Resetar vagas" title="Resetar vagas">
-            <svg class="mainIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M21 12a9 9 0 1 1-3-6.7"/>
-              <path d="M21 3v7h-7"/>
-            </svg>
-            <svg class="okIcon svgCheck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M20 6 9 17l-5-5"/>
-            </svg>
-          </button>
-          <div class="iconCaption">Resetar vagas</div>
         </div>
 
         <div class="card">
           <textarea id="display" class="display" readonly></textarea>
 
+          <!-- 3 botões finais: Copiar / WhatsApp / Limpar -->
           <div class="iconRow3">
             <div class="iconWrap" id="wrap_btnCopiar">
               <button id="btnCopiar" class="iconBtn copy" type="button" aria-label="Copiar anúncio" title="Copiar anúncio">
@@ -492,34 +460,18 @@
               <div class="iconCaption">Copiar anúncio</div>
             </div>
 
-            <div class="iconWrap" id="wrap_btnCopiarMidia">
-              <button id="btnCopiarMidia" class="iconBtn" type="button" aria-label="Copiar link do vídeo" title="Copiar link do vídeo">
-                <svg class="mainIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M10 13a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"/>
-                  <path d="M14 11a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1"/>
-                </svg>
-                <svg class="okIcon svgCheck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M20 6 9 17l-5-5"/>
-                </svg>
-              </button>
-              <div class="iconCaption">Link vídeo</div>
-            </div>
-
             <div class="iconWrap" id="wrap_btnWhats">
-              <button id="btnWhats" class="iconBtn whatsapp" type="button" aria-label="Abrir WhatsApp com o anúncio" title="Abrir WhatsApp com o anúncio">
+              <button id="btnWhats" class="iconBtn whatsapp" type="button" aria-label="WhatsApp" title="WhatsApp">
+                <!-- ícone WhatsApp -->
                 <svg class="mainIcon" viewBox="0 0 32 32" aria-hidden="true" fill="currentColor">
                   <path d="M16.02 3.2C9.1 3.2 3.5 8.8 3.5 15.7c0 2.44.7 4.82 2.03 6.87L4 28.8l6.38-1.48a12.44 12.44 0 0 0 5.64 1.35h.01c6.92 0 12.52-5.6 12.52-12.5S22.94 3.2 16.02 3.2zm7.28 17.78c-.3.86-1.75 1.64-2.45 1.76-.65.11-1.49.16-2.41-.14-.56-.18-1.29-.42-2.22-.82-3.9-1.68-6.45-5.6-6.64-5.86-.19-.26-1.57-2.1-1.57-4.01 0-1.91 1-2.85 1.35-3.24.35-.39.77-.49 1.03-.49h.74c.23 0 .54-.09.84.64.3.73 1.02 2.5 1.11 2.68.09.17.15.39.03.64-.12.26-.18.42-.35.64-.17.22-.36.49-.52.66-.17.17-.34.36-.15.7.19.35.83 1.36 1.78 2.2 1.22 1.08 2.25 1.41 2.6 1.58.35.17.56.14.77-.09.21-.22.89-1.04 1.13-1.4.24-.35.48-.3.81-.18.33.12 2.1.99 2.46 1.17.36.18.6.26.69.4.09.13.09.77-.21 1.63z"/>
                 </svg>
               </button>
               <div class="iconCaption">WhatsApp</div>
             </div>
-          </div>
 
-          <div class="iconRow3">
             <div class="iconWrap" id="wrap_btnLimpar">
-              <button id="btnLimpar" class="iconBtn clear" type="button" aria-label="Limpar tudo e voltar ao topo" title="Limpar tudo e voltar ao topo">
+              <button id="btnLimpar" class="iconBtn clear" type="button" aria-label="Limpar" title="Limpar">
                 <svg class="mainIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                      stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M3 6h18"/>
@@ -531,35 +483,6 @@
               </button>
               <div class="iconCaption">Limpar</div>
             </div>
-
-            <div class="iconWrap" id="wrap_btnAbrirMidia">
-              <button id="btnAbrirMidia" class="iconBtn" type="button" aria-label="Abrir vídeo" title="Abrir vídeo">
-                <!-- play -->
-                <svg class="mainIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M8 5v14l11-7z"></path>
-                  <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-                </svg>
-              </button>
-              <div class="iconCaption">Abrir vídeo</div>
-            </div>
-
-            <div class="iconWrap" id="wrap_btnAbrirGrupo">
-              <button id="btnAbrirGrupo" class="iconBtn" type="button" aria-label="Abrir grupo TSG" title="Abrir grupo TSG">
-                <svg class="mainIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                     stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                  <circle cx="9" cy="7" r="4"/>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
-              </button>
-              <div class="iconCaption">Grupo TSG</div>
-            </div>
-          </div>
-
-          <div class="note">
-            Observação: no iPhone, o navegador normalmente copia apenas texto. Para mandar o vídeo junto, coloque o link do YouTube no anúncio (e/ou cole o link no WhatsApp).
           </div>
         </div>
       </div>
@@ -570,6 +493,7 @@
 
 <script>
   const state = { groupSize: 3, mode: 'multi' };
+  const STORAGE_KEY = 'tsg_calc_state_v1';
 
   function showToast(msg){
     const t = document.getElementById('toast');
@@ -684,7 +608,7 @@
     refreshRulesNote();
   }
 
-  function buildSlots(){
+  function buildSlots(savedNames){
     const wrap = document.getElementById('slots');
     wrap.innerHTML = '';
     slotDefs().forEach(d=>{
@@ -695,26 +619,29 @@
       `;
       wrap.appendChild(div);
     });
+
+    // restore nomes
+    if (savedNames){
+      slotDefs().forEach(d=>{
+        const v = savedNames[d.key];
+        if (typeof v === 'string') document.getElementById(`name_${d.key}`).value = v;
+      });
+    }
+
     slotDefs().forEach(d=>{
-      document.getElementById(`name_${d.key}`).addEventListener('input', render);
+      document.getElementById(`name_${d.key}`).addEventListener('input', () => {
+        saveState();
+        render();
+      });
     });
   }
 
-  function resetSlotsOnly(){
-    buildSlots();
-    render();
-    showToast('Vagas resetadas');
-    setIconButtonOk('btnResetVagas');
-  }
-
   // ==== YouTube only ====
-
   function normalizeYoutubeUrl(raw){
     if (!raw) return null;
     let s = String(raw).trim();
     if (!s) return null;
 
-    // aceita sem protocolo
     if (!/^https?:\/\//i.test(s)) s = 'https://' + s;
 
     let u;
@@ -722,32 +649,27 @@
 
     const host = u.hostname.replace(/^www\./,'').toLowerCase();
 
-    // youtu.be/<id>
     if (host === 'youtu.be'){
       const id = u.pathname.replace('/','').trim();
       if (!id) return null;
-      return { id, url: `https://youtu.be/${id}`, embed: `https://www.youtube.com/embed/${id}` };
+      return { id, url: `https://youtu.be/${id}` };
     }
 
-    // youtube.com
     if (host === 'youtube.com' || host.endsWith('.youtube.com')){
-      // /watch?v=ID
       if (u.pathname === '/watch'){
         const id = u.searchParams.get('v');
         if (!id) return null;
-        return { id, url: `https://www.youtube.com/watch?v=${id}`, embed: `https://www.youtube.com/embed/${id}` };
+        return { id, url: `https://www.youtube.com/watch?v=${id}` };
       }
-      // /shorts/ID
       const mShorts = /^\/shorts\/([^\/\?]+)/.exec(u.pathname);
       if (mShorts) {
         const id = mShorts[1];
-        return { id, url: `https://www.youtube.com/shorts/${id}`, embed: `https://www.youtube.com/embed/${id}` };
+        return { id, url: `https://www.youtube.com/shorts/${id}` };
       }
-      // /embed/ID
       const mEmbed = /^\/embed\/([^\/\?]+)/.exec(u.pathname);
       if (mEmbed) {
         const id = mEmbed[1];
-        return { id, url: `https://www.youtube.com/embed/${id}`, embed: `https://www.youtube.com/embed/${id}` };
+        return { id, url: `https://www.youtube.com/watch?v=${id}` };
       }
     }
 
@@ -759,12 +681,13 @@
     return normalizeYoutubeUrl(raw);
   }
 
+  // preview sem iframe (evita avisos do YouTube no console)
   function updateMediaPreview(){
     const box = document.getElementById('mediaPreview');
     const raw = (document.getElementById('mediaUrl').value || '').trim();
 
     if (!raw){
-      box.innerHTML = 'Sem vídeo (opcional).';
+      box.textContent = 'Sem vídeo (opcional).';
       return;
     }
 
@@ -775,15 +698,46 @@
     }
 
     const safe = yt.url.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    box.innerHTML = `Vídeo do YouTube detectado:<br><small style="color:var(--muted)">${safe}</small>
-      <iframe src="${yt.embed}" title="YouTube" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+    box.innerHTML = `✅ Link do YouTube detectado:<br><small style="color:var(--muted)">${safe}</small>`;
   }
 
+  // Para evitar "aba em branco" no iPhone:
+  // a lupa abre o YouTube NA MESMA ABA, salvando o estado antes.
   function openYoutubeSearch(){
     const q = (document.getElementById('game').value || '').trim();
     const url = q ? `https://www.youtube.com/results?search_query=${encodeURIComponent(q)}` : 'https://www.youtube.com/';
-    window.open(url, '_blank');
+    saveState();
+    window.location.href = url;
   }
+
+  // tenta preencher o campo com o que estiver no clipboard (quando voltar pro navegador)
+  async function tryAutofillFromClipboard(){
+    try{
+      if (!navigator.clipboard || !window.isSecureContext) return;
+      const txt = (await navigator.clipboard.readText())?.trim();
+      if (!txt) return;
+
+      const yt = normalizeYoutubeUrl(txt);
+      if (!yt) return;
+
+      const inp = document.getElementById('mediaUrl');
+      const cur = inp.value.trim();
+      if (cur && normalizeYoutubeUrl(cur)) return;
+
+      inp.value = yt.url;
+      updateMediaPreview();
+      saveState();
+      render();
+      showToast('Link do YouTube preenchido');
+    } catch {
+      // iOS pode bloquear leitura do clipboard sem gesto do usuário
+    }
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') tryAutofillFromClipboard();
+  });
+  window.addEventListener('focus', () => tryAutofillFromClipboard());
 
   function buildAnnouncementText(){
     const game = (document.getElementById('game').value || '').trim();
@@ -797,9 +751,9 @@
     const preISO = preEnabled ? (document.getElementById('preDate').value || '') : '';
     const preBR = fmtDateBRFromISO(preISO);
 
-    if (!game && totalCents <= 0) return "Preencha o nome do jogo e o valor para gerar o anúncio.";
-    if (!game) return "Preencha o nome do jogo.";
-    if (totalCents <= 0) return "Preencha o valor do jogo (ex.: 300,00).";
+    if (!game || totalCents <= 0){
+      return "Visualização do anúncio";
+    }
 
     const shares = calcSharesNormal(totalCents, state.groupSize);
     const secLabel = secondaryLabel();
@@ -807,7 +761,6 @@
 
     const lines = [];
 
-    // só inclui no anúncio se for YouTube válido
     const yt = getYoutube();
     if (yt){
       lines.push(`Vídeo: ${yt.url}`);
@@ -879,44 +832,14 @@
     }
   }
 
-  async function copiarMidia(){
-    const yt = getYoutube();
-    if (!yt){
-      showToast('Cole um link do YouTube');
-      return;
-    }
-    const ok = await copyText(yt.url);
-    if (ok){
-      showToast('Link copiado!');
-      setIconButtonOk('btnCopiarMidia');
-    } else {
-      showToast('Não foi possível copiar');
-    }
-  }
-
   function abrirWhatsApp(){
     const text = (buildAnnouncementText() || '').trim();
-    if (!text){
-      showToast('Sem anúncio');
+    if (!text || text === 'Visualização do anúncio'){
+      showToast('Preencha nome e valor');
       return;
     }
-    const url = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text);
-    window.open(url, '_blank');
-  }
-
-  function abrirVideo(){
-    const yt = getYoutube();
-    if (!yt){
-      showToast('Cole um link do YouTube');
-      return;
-    }
-    window.open(yt.url, '_blank');
-  }
-
-  function abrirGrupo(){
-    const group = (document.getElementById('groupUrl').value || '').trim()
-      || "https://chat.whatsapp.com/ChYWroKiMLhCHTWDwM4k5u";
-    window.open(group, '_blank');
+    // para evitar "aba em branco" no iPhone, abre na mesma aba
+    window.location.href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text);
   }
 
   function limpar(){
@@ -932,17 +855,15 @@
     document.getElementById('preDate').value = '';
     document.getElementById('preDate').style.display = 'none';
 
-    if (!document.getElementById('groupUrl').value.trim()){
-      document.getElementById('groupUrl').value = "https://chat.whatsapp.com/ChYWroKiMLhCHTWDwM4k5u";
-    }
-
     state.groupSize = 3;
     state.mode = 'multi';
 
-    updateMediaPreview();
     refreshButtons();
     buildSlots();
+    updateMediaPreview();
     render();
+
+    localStorage.removeItem(STORAGE_KEY);
 
     showToast('Limpo!');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -953,7 +874,10 @@
     state.mode = mode;
     if (isExclusive()) state.groupSize = 3;
     refreshButtons();
-    buildSlots();
+    // preserva valores já digitados nas vagas
+    const names = collectSlotNames();
+    buildSlots(names);
+    saveState();
     render();
   }
 
@@ -961,7 +885,9 @@
     if (size === 5 && isExclusive()) return;
     state.groupSize = size;
     refreshButtons();
-    buildSlots();
+    const names = collectSlotNames();
+    buildSlots(names);
+    saveState();
     render();
   }
 
@@ -970,44 +896,113 @@
     const dt = document.getElementById(dateId);
     dt.style.display = en.checked ? 'block' : 'none';
     if (!en.checked) dt.value = '';
+    saveState();
+    render();
+  }
+
+  function collectSlotNames(){
+    const out = {};
+    slotDefs().forEach(d=>{
+      const el = document.getElementById(`name_${d.key}`);
+      if (el) out[d.key] = el.value || '';
+    });
+    return out;
+  }
+
+  function saveState(){
+    try{
+      const payload = {
+        mode: state.mode,
+        groupSize: state.groupSize,
+        game: document.getElementById('game').value || '',
+        price: document.getElementById('price').value || '',
+        promoEnable: !!document.getElementById('promoEnable').checked,
+        promoDate: document.getElementById('promoDate').value || '',
+        preEnable: !!document.getElementById('preEnable').checked,
+        preDate: document.getElementById('preDate').value || '',
+        mediaUrl: document.getElementById('mediaUrl').value || '',
+        slotNames: collectSlotNames()
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    } catch {}
+  }
+
+  function loadState(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch { return null; }
+  }
+
+  function applyLoadedState(s){
+    if (!s) return;
+
+    state.mode = (s.mode === 'exclusive') ? 'exclusive' : 'multi';
+    state.groupSize = (s.groupSize === 5) ? 5 : 3;
+    if (state.mode === 'exclusive') state.groupSize = 3;
+
+    document.getElementById('game').value = s.game || '';
+    document.getElementById('price').value = s.price || '';
+
+    document.getElementById('promoEnable').checked = !!s.promoEnable;
+    document.getElementById('promoDate').value = s.promoDate || '';
+    document.getElementById('promoDate').style.display = s.promoEnable ? 'block' : 'none';
+
+    document.getElementById('preEnable').checked = !!s.preEnable;
+    document.getElementById('preDate').value = s.preDate || '';
+    document.getElementById('preDate').style.display = s.preEnable ? 'block' : 'none';
+
+    document.getElementById('mediaUrl').value = s.mediaUrl || '';
+    const yt = getYoutube();
+    if (yt) document.getElementById('mediaUrl').value = yt.url;
+
+    refreshButtons();
+    buildSlots(s.slotNames || {});
+    updateMediaPreview();
     render();
   }
 
   function init(){
+    // restaura estado (importante para quando você sai pra buscar no YouTube e volta)
+    applyLoadedState(loadState());
+
     document.getElementById('btnMulti').addEventListener('click', ()=>setMode('multi'));
     document.getElementById('btnExclusive').addEventListener('click', ()=>setMode('exclusive'));
     document.getElementById('btnG3').addEventListener('click', ()=>setGroup(3));
     document.getElementById('btnG5').addEventListener('click', ()=>setGroup(5));
 
-    document.getElementById('btnResetVagas').addEventListener('click', resetSlotsOnly);
-
     document.getElementById('btnCopiar').addEventListener('click', copiarAnuncio);
-    document.getElementById('btnCopiarMidia').addEventListener('click', copiarMidia);
     document.getElementById('btnWhats').addEventListener('click', abrirWhatsApp);
     document.getElementById('btnLimpar').addEventListener('click', limpar);
-    document.getElementById('btnAbrirMidia').addEventListener('click', abrirVideo);
-    document.getElementById('btnAbrirGrupo').addEventListener('click', abrirGrupo);
 
     document.getElementById('btnYoutubeSearch').addEventListener('click', openYoutubeSearch);
 
-    document.getElementById('game').addEventListener('input', render);
-    document.getElementById('price').addEventListener('input', render);
+    document.getElementById('game').addEventListener('input', ()=>{ saveState(); render(); });
+    document.getElementById('price').addEventListener('input', ()=>{ saveState(); render(); });
 
     document.getElementById('promoEnable').addEventListener('change', ()=>toggleDateInput('promoEnable','promoDate'));
-    document.getElementById('promoDate').addEventListener('change', render);
+    document.getElementById('promoDate').addEventListener('change', ()=>{ saveState(); render(); });
 
     document.getElementById('preEnable').addEventListener('change', ()=>toggleDateInput('preEnable','preDate'));
-    document.getElementById('preDate').addEventListener('change', render);
+    document.getElementById('preDate').addEventListener('change', ()=>{ saveState(); render(); });
 
     document.getElementById('mediaUrl').addEventListener('input', ()=>{
+      const yt = getYoutube();
+      if (yt) document.getElementById('mediaUrl').value = yt.url;
       updateMediaPreview();
+      saveState();
       render();
     });
 
-    refreshButtons();
-    buildSlots();
-    updateMediaPreview();
-    render();
+    // se não tinha estado salvo, inicializa UI padrão
+    if (!loadState()){
+      refreshButtons();
+      buildSlots();
+      updateMediaPreview();
+      render();
+      saveState();
+    }
   }
 
   init();

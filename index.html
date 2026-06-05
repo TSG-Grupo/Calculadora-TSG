@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Calculadora TSG</title>
 
-  <meta property="og:title" content="Calculadora TSG" />
+  <meta property="og:title" content="Calculadora - Anúncios" />
   <meta property="og:description" content="Gera anúncio pronto (valores + vagas) para postar no WhatsApp." />
   <meta property="og:type" content="website" />
 
@@ -340,7 +340,7 @@
 <body>
   <div class="wrap">
     <div>
-      <h1>Calculadora TSG</h1>
+      <h1>Calculadora - Anúncio</h1>
       <div class="hint">Preencha os campos e o anúncio aparece no final, pronto para copiar.</div>
     </div>
 
@@ -574,7 +574,7 @@
   }
 
   function isExclusive(){ return state.mode === 'exclusive'; }
-  function secondaryLabel(){ return isExclusive() ? 'Secundária PS5' : 'Secundária (PS4/PS5)'; }
+  function secondaryLabel(){ return isExclusive() ? 'Original 2 PS5' : 'Original 2 (PS4/PS5)'; }
 
   function fmtDateBRFromISO(iso){
     if (!iso) return '';
@@ -587,16 +587,16 @@
     const sec = secondaryLabel();
     if (state.groupSize === 5){
       return [
-        {key:'ps4p1', label:'Primária 1 PS4'},
-        {key:'ps4p2', label:'Primária 2 PS4'},
-        {key:'ps5p1', label:'Primária 1 PS5'},
-        {key:'ps5p2', label:'Primária 2 PS5'},
+        {key:'ps4p1', label:'Original 1 PS4'},
+        {key:'ps4p2', label:'Original 1 PS4'},
+        {key:'ps5p1', label:'Original 1 PS5'},
+        {key:'ps5p2', label:'Original 1 PS5'},
         {key:'sec',   label: sec}
       ];
     }
     return [
-      {key:'ps5p1', label:'Primária 1 PS5'},
-      {key:'ps5p2', label:'Primária 2 PS5'},
+      {key:'ps5p1', label:'Original 1 PS5'},
+      {key:'ps5p2', label:'Original 1 PS5'},
       {key:'sec',   label: sec}
     ];
   }
@@ -604,9 +604,9 @@
   function refreshRulesNote(){
     const el = document.getElementById('rulesNote');
     if (state.groupSize === 3){
-      el.textContent = 'Regras: Grupo 3 = 40% (cada primária) e 20% (secundária).';
+      el.textContent = 'Regras: Grupo 3 = 40% (cada Ori 1) e 20% (Ori 2).';
     } else {
-      el.textContent = 'Regras: Grupo 5 = 22,5% (cada primária) e 10% (secundária).';
+      el.textContent = 'Regras: Grupo 5 = 22,5% (cada Ori 1) e 10% (Ori 2).';
     }
   }
 
@@ -797,11 +797,11 @@
     lines.push('');
 
     if (state.groupSize === 3){
-      lines.push(`Primárias PS5 - ${centsToBRL(shares[0])}`);
+      lines.push(`Original 1 PS5 - ${centsToBRL(shares[0])}`);
       lines.push(`${secLabel} - ${centsToBRL(shares[2])}`);
     } else {
-      lines.push(`Primárias PS4 - ${centsToBRL(shares[0])}`);
-      lines.push(`Primárias PS5 - ${centsToBRL(shares[2])}`);
+      lines.push(`Original 1 PS4 - ${centsToBRL(shares[0])}`);
+      lines.push(`Original 1 PS5 - ${centsToBRL(shares[2])}`);
       lines.push(`${secLabel} - ${centsToBRL(shares[4])}`);
     }
 
@@ -812,7 +812,7 @@
     });
 
     lines.push('');
-    lines.push('Se o grupo fechar sem a Secundária, o valor será redistribuído entre as Primárias.');
+    lines.push('Se o grupo fechar sem a Ori 2, o valor será redistribuído entre as Ori 1.');
 
     return lines.join('\n');
   }
